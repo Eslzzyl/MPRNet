@@ -1,6 +1,6 @@
 import os
 from config import Config 
-opt = Config('training.yml')
+opt = Config('training_GTRAIN.yml')
 
 gpus = ','.join([str(i) for i in opt.GPU])
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -122,6 +122,7 @@ for epoch in range(start_epoch, opt.OPTIM.NUM_EPOCHS + 1):
         loss = (loss_char) + (0.05*loss_edge)
         
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(model_restoration.parameters(), 0.01)
         optimizer.step()
         epoch_loss +=loss.item()
 
